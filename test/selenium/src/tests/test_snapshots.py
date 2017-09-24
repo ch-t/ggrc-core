@@ -469,11 +469,11 @@ class TestSnapshots(base.Test):
     expected_control = audit_with_one_control["new_control_rest"][0].repr_ui()
     audit = audit_with_one_control["new_audit_rest"][0]
     existing_obj = dynamic_object
-    (get_cls_webui_service(objects.get_plural(existing_obj.type))(selenium).
+    (get_cls_webui_service(existing_obj.type)(selenium).
         map_objs_via_tree_view_item(
         src_obj=audit, dest_objs=[expected_control]))
     controls_ui_service = get_cls_webui_service(
-        objects.get_plural(expected_control.type))(selenium)
+        expected_control.type)(selenium)
     actual_controls_count = controls_ui_service.get_count_objs_from_tab(
         src_obj=existing_obj)
     actual_controls = (controls_ui_service.get_list_objs_from_tree_view(
@@ -552,9 +552,8 @@ class TestSnapshots(base.Test):
     expected_obj = dynamic_object.repr_ui().update_attrs(status=expected_state)
     (webui_service.ControlsService(selenium).map_objs_via_tree_view(
         src_obj=expected_obj, dest_objs=[snapshoted_control]))
-    actual_objs = (get_cls_webui_service(
-        objects.get_plural(expected_obj.type))(selenium).
-        get_list_objs_from_tree_view(src_obj=origin_control))
+    actual_objs = (get_cls_webui_service(expected_obj.type)(selenium).
+                   get_list_objs_from_tree_view(src_obj=origin_control))
     # due to 'actual_obj.custom_attributes = {None: None}'
     #        'expected_asmt.objects_under_assessment = None'
     self.general_assert(

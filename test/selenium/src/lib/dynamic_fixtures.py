@@ -52,29 +52,32 @@ def _new_objs_rest(obj_name, obj_count,  # noqa: ignore=C901
     Return: [lib.entities.entity.*Entity, ...]
     """
     return factory.get_cls_rest_service(
-        object_name=name)().create_objs(count=count,
-                                        factory_params=factory_params)
+        object_name_or_type=name)().create_objs(count=count,
+                                                factory_params=factory_params)
 
   def create_objs_rest_used_exta_arrts(name, extra_attrs, factory_params):
     """Create new objects via REST API according to object name (plural form)
     and list extra attributes.
     Return: [lib.entities.entity.*Entity, ...]
     """
-    if extra_attrs[0].type == objects.get_singular(objects.CUSTOM_ATTRIBUTES):
+    if extra_attrs[0].type == objects.get_singular(
+      objects.CUSTOM_ATTRIBUTE_DEFINITIONS):
       if name == objects.ASSESSMENT_TEMPLATES:
-        return factory.get_cls_rest_service(object_name=name)().create_objs(
+        return factory.get_cls_rest_service(
+            object_name_or_type=name)().create_objs(
             count=1, factory_params=factory_params,
             custom_attribute_definitions=CustomAttributeDefinitionsFactory().
             generate_ca_defenitions_for_asmt_tmpls(
                 list_ca_definitions=extra_attrs[:len(_list_cas_types)]),
             audit=extra_attrs[len(_list_cas_types):][0].__dict__)
       else:
-        return factory.get_cls_rest_service(object_name=name)().create_objs(
+        return factory.get_cls_rest_service(
+            object_name_or_type=name)().create_objs(
             count=1, factory_params=factory_params,
             custom_attributes=CustomAttributeDefinitionsFactory().
             generate_ca_values(list_ca_def_objs=extra_attrs))
     else:
-      return ([factory.get_cls_rest_service(object_name=name)().
+      return ([factory.get_cls_rest_service(object_name_or_type=name)().
               create_objs(count=1, factory_params=factory_params,
                           **{parent_obj.type.lower(): parent_obj.__dict__})[0]
                for parent_obj in extra_attrs])
@@ -123,7 +126,7 @@ def generate_common_fixtures(*fixtures):  # noqa: ignore=C901
     """
     if "new_cas_for_" in fixture:
       fixture_params = fixture.replace("new_cas_for_", "").replace("_rest", "")
-      obj_name = objects.CUSTOM_ATTRIBUTES
+      obj_name = objects.CUSTOM_ATTRIBUTE_DEFINITIONS
       factory_cas_for_objs = [CustomAttributeDefinitionsFactory().create(
           attribute_type=ca_type,
           definition_type=objects.get_singular(fixture_params))
@@ -211,14 +214,15 @@ def generate_common_fixtures(*fixtures):  # noqa: ignore=C901
     if objs_to_update:
       if has_cas and parent_objs:
         updated_objs = (
-            factory.get_cls_rest_service(object_name=obj_name)().update_objs(
+            factory.get_cls_rest_service(
+                object_name_or_type=obj_name)().update_objs(
                 objs=objs_to_update, factory_params=factory_params,
                 custom_attributes=CustomAttributeDefinitionsFactory().
                 generate_ca_values(list_ca_def_objs=parent_objs)))
       else:
         updated_objs = factory.get_cls_rest_service(
-            object_name=obj_name)().update_objs(objs=objs_to_update,
-                                                factory_params=factory_params)
+            object_name_or_type=obj_name)().update_objs(
+            objs=objs_to_update, factory_params=factory_params)
       return updated_objs
 
   def delete_rest_fixture(fixture):
@@ -239,10 +243,10 @@ def generate_common_fixtures(*fixtures):  # noqa: ignore=C901
     if "_with_cas" in obj_name:
       obj_name = objects.get_plural(obj_name.replace("_with_cas", ""))
     if "cas_for_" in obj_name:
-      obj_name = objects.CUSTOM_ATTRIBUTES
+      obj_name = objects.CUSTOM_ATTRIBUTE_DEFINITIONS
     if objs_to_delete:
       deleted_objs = factory.get_cls_rest_service(
-          object_name=obj_name)().delete_objs(objs=objs_to_delete)
+          object_name_or_type=obj_name)().delete_objs(objs=objs_to_delete)
       return deleted_objs
 
   for fixture in fixtures:

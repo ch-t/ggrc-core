@@ -14,6 +14,7 @@ from lib.constants import messages, roles, element, value_aliases as alias
 from lib.constants.element import AssessmentStates
 from lib.entities import entities_factory, entity
 from lib.entities.entities_factory import CustomAttributeDefinitionsFactory
+from lib.factory import get_cls_rest_service, get_cls_webui_service
 from lib.service import rest_service, webui_service
 from lib.utils.filter_utils import FilterUtils
 
@@ -270,3 +271,31 @@ class TestAssessmentsWorkflow(base.Test):
       pytest.xfail(reason="GGRC-3157 Issue")
     else:
       pytest.fail(msg="GGRC-3157 Issue was fixed")
+
+  @pytest.mark.parametrize(
+    "dynamic_object, dynamic_new_gcas, dynamic_relationships",
+    [#("new_assessment_rest", "new_cas_for_assessments_rest", None),
+     ("new_control_rest", "new_cas_for_controls_rest",
+      "map_new_control_rest_to_new_audit_rest")],
+    indirect=True)
+  @pytest.mark.smoke_tests
+  def test_gca_in_tree_view(
+        self, new_program_rest, new_audit_rest,
+        dynamic_object, dynamic_relationships, dynamic_new_gcas, selenium):
+    """"""
+    custom_attr_values = (
+      CustomAttributeDefinitionsFactory().generate_ca_values(
+        list_ca_def_objs=dynamic_new_gcas))
+    checkbox_id = entity.Entity.filter_objs_by_attrs(
+      objs=dynamic_new_gcas,
+      attribute_type=element.AdminWidgetCustomAttributes.CHECKBOX).id
+    custom_attr_values[checkbox_id] = True
+    expected_obj = dynamic_object
+    (get_cls_rest_service(expected_obj.type)().update_obj(
+      obj=dynamic_object, custom_attributes=custom_attr_values))
+    # due to 'actual_asmt.custom_attributes = {None: None}'
+    gca_titles = [gca.title for gca in dynamic_new_gcas]
+    actual_objs = (get_cls_webui_service(dynamic_object.type)
+                   (selenium).get_scopes_from_tree_view_with_custom_fields(
+                   src_obj=new_audit_rest, fields=gca_titles))
+    self.general_assert(expected_obj, actual_objs)

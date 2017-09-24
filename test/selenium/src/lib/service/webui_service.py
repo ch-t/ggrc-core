@@ -122,6 +122,10 @@ class BaseWebUiService(object):
     return self._create_list_objs(entity_factory=self.entities_factory_cls,
                                   list_scopes=list_objs_scopes)
 
+  def get_scopes_from_tree_view_with_custom_fields(self, src_obj, fields):
+    self.set_list_objs_scopes_representation_on_tree_view(src_obj, fields)
+    return self.get_list_objs_scopes_from_tree_view(src_obj)
+
   def get_list_objs_from_mapper(self, src_obj, dest_objs):
     """Get and return list of objects from Unified Mapper Tree View and
      list of MappingStatusAttrs - namedtuples for mapping representation."""
@@ -225,13 +229,14 @@ class BaseWebUiService(object):
     objs_widget = self.open_widget_of_mapped_objs(src_obj)
     return objs_widget.member_count
 
-  def set_list_objs_scopes_representation_on_tree_view(self, src_obj):
+  def set_list_objs_scopes_representation_on_tree_view(
+        self, src_obj, fields=None):
     """Open generic widget of mapped objects, set visible fields for objects
     scopes representation on Tree View.
     """
     # pylint: disable=invalid-name
     objs_widget = self.open_widget_of_mapped_objs(src_obj)
-    (objs_widget.tree_view.open_set_visible_fields().
+    (objs_widget.tree_view.open_set_visible_fields(fields).
      select_and_set_visible_fields())
 
   def _set_list_objs_scopes_repr_on_mapper_tree_view(self, src_obj):

@@ -611,14 +611,15 @@ class TreeView(Component):
       self._init_tree_view_items()
     return self._tree_view_items
 
-  def open_set_visible_fields(self):
+  def open_set_visible_fields(self, fields):
     """Click to Set Visible Fields button on Tree View to open
     Set Visible Fields modal.
     Return: lib.page.modal.set_fields.SetVisibleFieldsModal
     """
     _locator_set_visible_fields = self.locator_set_visible_fields
     Button(self._driver, _locator_set_visible_fields).click()
-    return SetVisibleFieldsModal(self._driver, self.fields_to_set)
+    return SetVisibleFieldsModal(self._driver,
+                                 fields if fields else self.fields_to_set)
 
   def get_list_members_as_list_scopes(self):
     """Get list of scopes (dicts) from members (text scopes) which displayed on

@@ -69,7 +69,7 @@ class CustomAttributesItemContent(base.Component):
       self.custom_attributes_list.append(
           CustomAttributeEntity(
               title=attrs[0],
-              type=objects.get_singular(objects.CUSTOM_ATTRIBUTES),
+              type=objects.get_singular(objects.CUSTOM_ATTRIBUTE_DEFINITIONS),
               attribute_type=attrs[1],
               mandatory=get_bool_value_from_arg(attrs[2]),
               definition_type=self._item_name))

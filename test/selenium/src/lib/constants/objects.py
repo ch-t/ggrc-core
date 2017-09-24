@@ -35,7 +35,7 @@ MARKETS = "markets"
 RISKS = "risks"
 THREATS = "threats"
 RISK_ASSESSMENTS = "risk_assessments"
-CUSTOM_ATTRIBUTES = "custom_attribute_definitions"
+CUSTOM_ATTRIBUTE_DEFINITIONS = "custom_attribute_definitions"
 COMMENTS = "comments"
 SNAPSHOTS = "snapshots"
 
@@ -124,10 +124,9 @@ def get_normal_form(obj_name, with_space=True):
  if with_space=False then risk_assessments -> RiskAssessments
  """
   normal = obj_name.replace("_", " ").title()
-  if with_space is True:
+  if with_space:
     return normal
-  elif with_space is False:
-    return normal.replace(" ", "")
+  return normal.replace(" ", "")
 
 
 ALL_PLURAL = [k for k in globals().keys() if

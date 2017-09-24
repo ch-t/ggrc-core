@@ -230,7 +230,7 @@ class CustomAttributeDefinitionsService(BaseRestService):
   """Service for working with Custom Attributes entities."""
   def __init__(self):
     super(CustomAttributeDefinitionsService, self).__init__(
-        url.CUSTOM_ATTRIBUTES)
+        url.CUSTOM_ATTRIBUTE_DEFINITIONS)
 
 
 class RelationshipsService(HelpRestService):

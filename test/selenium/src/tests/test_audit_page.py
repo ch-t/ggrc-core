@@ -41,7 +41,7 @@ class TestAuditPage(base.Test):
         # fixtures which are objects
         if fixture in request.fixturenames and fixture.startswith("new_"):
           fixture = locals().get(fixture)
-          (get_cls_rest_service(objects.get_plural(fixture.type))().
+          (get_cls_rest_service(fixture.type)().
            update_obj(obj=fixture, **params_to_update))
     expected_audit = entities_factory.AuditsFactory().clone(
         audit=new_audit_rest)[0]

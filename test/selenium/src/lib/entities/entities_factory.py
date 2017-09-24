@@ -31,7 +31,7 @@ class EntitiesFactory(object):
       objects.ASSESSMENT_TEMPLATES, title=True))
   obj_asmt = unicode(objects.get_singular(objects.ASSESSMENTS, title=True))
   obj_issue = unicode(objects.get_singular(objects.ISSUES, title=True))
-  obj_ca = unicode(objects.get_singular(objects.CUSTOM_ATTRIBUTES))
+  obj_ca = unicode(objects.get_singular(objects.CUSTOM_ATTRIBUTE_DEFINITIONS))
   obj_comment = unicode(objects.get_singular(objects.COMMENTS, title=True))
   obj_snapshot = unicode(objects.get_singular(objects.SNAPSHOTS, title=True))
 

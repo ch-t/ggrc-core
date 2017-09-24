@@ -369,3 +369,14 @@ def new_cas_for_assessments_rest(request):
   yield cas
   from lib.service.rest_service import CustomAttributeDefinitionsService
   CustomAttributeDefinitionsService().delete_objs(cas)
+
+
+@pytest.fixture(scope="function")
+def dynamic_new_gcas(request):
+
+  yield _common_fixtures(request.param)
+
+
+@pytest.fixture(scope="function")
+def map_new_control_rest_to_new_audit_rest(request):
+  yield _common_fixtures(request.fixturename)

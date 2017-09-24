@@ -114,18 +114,28 @@ def get_cls_entity_factory(object_name):
   return _factory(cls_name=cls_name, parent_cls=base_cls)
 
 
-def get_cls_rest_service(object_name):
+def get_cls_rest_service(object_name_or_type):
   """Get and return class of rest service."""
   from lib.service import rest_service
-  cls_name = object_name + constants.cls_name.SERVICE
+  object_name_or_type = (
+      object_name_or_type
+      if object_name_or_type.upper() in objects.ALL_PLURAL else
+      objects.get_plural(object_name_or_type, title=True))
+  cls_name = (objects.get_normal_form(object_name_or_type, with_space=False) +
+              constants.cls_name.SERVICE)
   base_cls = rest_service.BaseRestService
   return _factory(cls_name=cls_name, parent_cls=base_cls)
 
 
-def get_cls_webui_service(object_name):
+def get_cls_webui_service(object_name_or_type):
   """Get and return class of webui service."""
   from lib.service import webui_service
-  cls_name = object_name + constants.cls_name.SERVICE
+  object_name_or_type = (
+      object_name_or_type
+      if object_name_or_type.upper() in objects.ALL_PLURAL else
+      objects.get_plural(object_name_or_type, title=True))
+  cls_name = (objects.get_normal_form(object_name_or_type, with_space=False) +
+              constants.cls_name.SERVICE)
   base_cls = webui_service.BaseWebUiService
   return _factory(cls_name=cls_name, parent_cls=base_cls,
                   search_nested_subclasses=True)
