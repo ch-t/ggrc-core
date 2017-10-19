@@ -206,6 +206,9 @@ python /selenium/src/run_selenium.py
 
 You should also feel free to check how the `./bin/jenkins/run_selenium` script works.
 
+_NOTE: You can change test search rule by editing values:
+    "python_files", "python_functions", "python_classes"
+
 _NOTE: that the "ggrccore" part of the name is due to the repository parent folder name. if you have your repo in a different folder, change the first part accordingly._
 
 
